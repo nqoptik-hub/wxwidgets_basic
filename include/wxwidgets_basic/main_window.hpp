@@ -5,17 +5,20 @@
 
 enum WindowID : int
 {
-    BUTTOM_ID = 0,
-    TEXT_ID = 1,
-    LIST_ID = 2
+    ID_BUTTOM = 10001,
+    ID_TEXT,
+    ID_LIST,
+    ID_HELLO
 };
 
 class MainWindow : public wxFrame
 {
 private:
-    wxButton* button_ptr_ = nullptr;
-    wxTextCtrl* text_ptr_ = nullptr;
-    wxListBox* list_ptr_ = nullptr;
+    void on_hello(wxCommandEvent& event);
+    void on_about(wxCommandEvent& event);
+    void on_exit(wxCommandEvent& event);
+
+    wxDECLARE_EVENT_TABLE();
 
 public:
     MainWindow();
