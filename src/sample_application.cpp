@@ -2,9 +2,11 @@
 
 wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
     EVT_MENU(ID_HELLO, MainWindow::on_hello)
-        EVT_MENU(wxID_EXIT, MainWindow::on_exit)
-            EVT_MENU(wxID_ABOUT, MainWindow::on_about)
-                wxEND_EVENT_TABLE();
+        EVT_MENU(wxID_ABOUT, MainWindow::on_about)
+            EVT_MENU(ID_RUN, MainWindow::on_run)
+                EVT_MENU(ID_STOP, MainWindow::on_stop)
+                    EVT_MENU(wxID_EXIT, MainWindow::on_exit)
+                        wxEND_EVENT_TABLE();
 
 wxIMPLEMENT_APP(SampleApplication);
 
