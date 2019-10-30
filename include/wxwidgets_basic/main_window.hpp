@@ -2,14 +2,17 @@
 #define MAIN_WINDOW_HPP
 
 #include <atomic>
+#include <chrono>
+#include <ctime>
+#include <iostream>
 #include <thread>
 #include <wx/wx.h>
 
 enum WindowID : int
 {
     ID_HELLO = 10001,
-    ID_RUN,
-    ID_STOP,
+    ID_START_PRINTING_TIME,
+    ID_STOP_PRINTING_TIME,
     ID_BUTTOM,
     ID_TEXT,
     ID_LIST,
@@ -18,19 +21,20 @@ enum WindowID : int
 class MainWindow : public wxFrame
 {
 private:
-    int index_;
-    std::atomic<bool> is_counting_;
-    std::thread counting_thread_;
+    std::atomic<bool> is_printing_time_;
+    std::thread printing_time_thread_;
 
 private:
     void on_hello(wxCommandEvent& WXUNUSED(event));
-    void on_about(wxCommandEvent& WXUNUSED(event));
-    void on_run(wxCommandEvent& WXUNUSED(event));
-    void on_stop(wxCommandEvent& WXUNUSED(event));
     void on_exit(wxCommandEvent& WXUNUSED(event));
 
-    static void create_counting_thread(MainWindow* this_object_ptr);
-    void count_index();
+    void on_start_printing_time(wxCommandEvent& WXUNUSED(event));
+    void on_stop_printing_time(wxCommandEvent& WXUNUSED(event));
+
+    void on_about(wxCommandEvent& WXUNUSED(event));
+
+    static void create_printing_time_thread(MainWindow* this_object_ptr);
+    void print_time();
 
     wxDECLARE_EVENT_TABLE();
 

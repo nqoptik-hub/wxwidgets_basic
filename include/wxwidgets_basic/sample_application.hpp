@@ -7,9 +7,6 @@
 
 class SampleApplication : public wxApp
 {
-private:
-    MainWindow* main_window_ = nullptr;
-
 public:
     SampleApplication();
     ~SampleApplication();

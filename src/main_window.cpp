@@ -1,9 +1,8 @@
 #include "wxwidgets_basic/main_window.hpp"
 
-MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "SampleApplication", wxPoint(30, 30), wxSize(800, 600))
+MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "SampleApplication", wxPoint(100, 100), wxSize(800, 600))
 {
-    index_ = 0;
-    is_counting_ = false;
+    is_printing_time_ = false;
 
     // Menu file
     wxMenu* menu_file_ptr = new wxMenu();
@@ -11,11 +10,11 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "SampleApplication", wxPoi
     menu_file_ptr->AppendSeparator();
     menu_file_ptr->Append(wxID_EXIT);
 
-    // Menu run
-    wxMenu* menu_run_ptr = new wxMenu();
-    menu_run_ptr->Append(ID_RUN, "&Run\tCtrl-R", "Run string");
-    menu_run_ptr->AppendSeparator();
-    menu_run_ptr->Append(ID_STOP, "&Stop\tCtrl-S", "Stop string");
+    // Menu time
+    wxMenu* menu_time_ptr = new wxMenu();
+    menu_time_ptr->Append(ID_START_PRINTING_TIME, "&Start printing time\tCtrl-P", "Start printing");
+    menu_time_ptr->AppendSeparator();
+    menu_time_ptr->Append(ID_STOP_PRINTING_TIME, "&Stop printing time\tCtrl-S", "Stop printing");
 
     // Menu help
     wxMenu* menu_help_ptr = new wxMenu();
@@ -24,7 +23,7 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "SampleApplication", wxPoi
     // Menu bar
     wxMenuBar* menu_bar_ptr = new wxMenuBar();
     menu_bar_ptr->Append(menu_file_ptr, "&File");
-    menu_bar_ptr->Append(menu_run_ptr, "&Run");
+    menu_bar_ptr->Append(menu_time_ptr, "&Time");
     menu_bar_ptr->Append(menu_help_ptr, "&Help");
     SetMenuBar(menu_bar_ptr);
 
@@ -46,31 +45,31 @@ void MainWindow::on_hello(wxCommandEvent& WXUNUSED(event))
     wxMessageBox("Hello world from wxWidgets!", "Hello", wxOK | wxICON_INFORMATION);
 }
 
-void MainWindow::on_run(wxCommandEvent& WXUNUSED(event))
+void MainWindow::on_start_printing_time(wxCommandEvent& WXUNUSED(event))
 {
-    if (!is_counting_)
+    if (!is_printing_time_)
     {
-        is_counting_ = true;
-        counting_thread_ = std::thread(create_counting_thread, this);
-        wxMessageBox("Started running the counting thread!", "Run", wxOK | wxICON_INFORMATION);
+        is_printing_time_ = true;
+        printing_time_thread_ = std::thread(create_printing_time_thread, this);
+        wxMessageBox("Started printing time!", "Time", wxOK | wxICON_INFORMATION);
     }
     else
     {
-        wxMessageBox("The counting thread is already running!", "Warning", wxOK | wxICON_WARNING);
+        wxMessageBox("The time printer is already running!", "Warning", wxOK | wxICON_WARNING);
     }
 }
 
-void MainWindow::on_stop(wxCommandEvent& WXUNUSED(event))
+void MainWindow::on_stop_printing_time(wxCommandEvent& WXUNUSED(event))
 {
-    if (is_counting_)
+    if (is_printing_time_)
     {
-        is_counting_ = false;
-        counting_thread_.detach();
-        wxMessageBox("Stopped the counting thead!", "Stop", wxOK | wxICON_INFORMATION);
+        is_printing_time_ = false;
+        printing_time_thread_.detach();
+        wxMessageBox("Stopped printing time!", "Time", wxOK | wxICON_INFORMATION);
     }
     else
     {
-        wxMessageBox("The counting thead is not runing!", "Warning", wxOK | wxICON_WARNING);
+        wxMessageBox("The time printer is not runing!", "Warning", wxOK | wxICON_WARNING);
     }
 }
 
@@ -81,9 +80,9 @@ void MainWindow::on_about(wxCommandEvent& WXUNUSED(event))
 
 void MainWindow::on_exit(wxCommandEvent& WXUNUSED(event))
 {
-    if (is_counting_)
+    if (is_printing_time_)
     {
-        wxMessageBox("The counting thread is still running, please stop it before close the application!", "Warning", wxOK | wxICON_WARNING);
+        wxMessageBox("The time printer is still running, please stop it before close the application!", "Warning", wxOK | wxICON_WARNING);
     }
     else
     {
@@ -91,17 +90,17 @@ void MainWindow::on_exit(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void MainWindow::create_counting_thread(MainWindow* this_object_ptr)
+void MainWindow::create_printing_time_thread(MainWindow* this_object_ptr)
 {
-    this_object_ptr->count_index();
+    this_object_ptr->print_time();
 }
 
-void MainWindow::count_index()
+void MainWindow::print_time()
 {
-    while (is_counting_)
+    while (is_printing_time_)
     {
-        printf("current index: %d\n", index_);
-        ++index_;
+        std::time_t time_now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        printf("%s\n", std::ctime(&time_now));
         usleep(1000000);
     }
 }
