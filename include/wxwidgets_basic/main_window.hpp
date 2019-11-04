@@ -24,6 +24,10 @@ private:
     std::atomic<bool> is_printing_time_;
     std::thread printing_time_thread_;
 
+    wxButton* button_ptr_;
+    wxTextCtrl* text_ptr_;
+    wxListBox* list_ptr_;
+
 private:
     void on_hello(wxCommandEvent& WXUNUSED(event));
     void on_exit(wxCommandEvent& WXUNUSED(event));

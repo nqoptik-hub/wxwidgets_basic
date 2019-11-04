@@ -31,9 +31,9 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "SampleApplication", wxPoi
     CreateStatusBar();
     SetStatusText("Welcome to SampleApplication!");
 
-    wxButton* button_ptr = new wxButton(this, ID_BUTTOM, "Click me", wxPoint(10, 10), wxSize(150, 50));
-    wxTextCtrl* text_ptr = new wxTextCtrl(this, ID_TEXT, "Text", wxPoint(10, 70), wxSize(300, 30));
-    wxListBox* list_ptr = new wxListBox(this, ID_LIST, wxPoint(10, 110), wxSize(300, 300));
+    button_ptr_ = new wxButton(this, ID_BUTTOM, "Click me", wxPoint(10, 10), wxSize(150, 50));
+    text_ptr_ = new wxTextCtrl(this, ID_TEXT, "Text", wxPoint(10, 70), wxSize(300, 30));
+    list_ptr_ = new wxListBox(this, ID_LIST, wxPoint(10, 110), wxSize(300, 300));
 }
 
 MainWindow::~MainWindow()
@@ -100,7 +100,9 @@ void MainWindow::print_time()
     while (is_printing_time_)
     {
         std::time_t time_now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-        printf("%s\n", std::ctime(&time_now));
+        wxString text_content = text_ptr_->GetValue();
+        printf("%s", std::ctime(&time_now));
+        printf("%s\n", text_content.mb_str().data());
         usleep(1000000);
     }
 }
