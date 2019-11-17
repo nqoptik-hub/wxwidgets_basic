@@ -1,5 +1,8 @@
 #include "wxwidgets_basic/main_window.hpp"
 
+wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
+    wxEND_EVENT_TABLE();
+
 MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "SampleApplication", wxPoint(100, 100), wxSize(800, 600))
 {
     is_printing_time_ = false;
@@ -7,18 +10,23 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "SampleApplication", wxPoi
     // Menu file
     wxMenu* menu_file_ptr = new wxMenu();
     menu_file_ptr->Append(ID_MENU_HELLO, "&Hello\tCtrl-H", "Help string shown in status bar for this menu item");
+    Connect(ID_MENU_HELLO, wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)&MainWindow::on_hello);
     menu_file_ptr->AppendSeparator();
     menu_file_ptr->Append(wxID_EXIT);
+    Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)&MainWindow::on_exit);
 
     // Menu time
     wxMenu* menu_time_ptr = new wxMenu();
     menu_time_ptr->Append(ID_MENU_START_PRINTING_TIME, "&Start printing time\tCtrl-P", "Start printing");
+    Connect(ID_MENU_START_PRINTING_TIME, wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)&MainWindow::on_start_printing_time);
     menu_time_ptr->AppendSeparator();
     menu_time_ptr->Append(ID_MENU_STOP_PRINTING_TIME, "&Stop printing time\tCtrl-S", "Stop printing");
+    Connect(ID_MENU_STOP_PRINTING_TIME, wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)&MainWindow::on_stop_printing_time);
 
     // Menu help
     wxMenu* menu_help_ptr = new wxMenu();
     menu_help_ptr->Append(wxID_ABOUT);
+    Connect(wxID_ABOUT, wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)&MainWindow::on_about);
 
     // Menu bar
     wxMenuBar* menu_bar_ptr = new wxMenuBar();
@@ -33,6 +41,7 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "SampleApplication", wxPoi
 
     text_ptr_ = new wxTextCtrl(this, wxID_ANY, "Sample text", wxPoint(10, 70), wxSize(300, 30));
     button_ptr_ = new wxButton(this, ID_BUTTON_CLICK_ME, "Click me", wxPoint(10, 10), wxSize(150, 50));
+    Connect(ID_BUTTON_CLICK_ME, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&MainWindow::on_click_me);
 }
 
 MainWindow::~MainWindow()
