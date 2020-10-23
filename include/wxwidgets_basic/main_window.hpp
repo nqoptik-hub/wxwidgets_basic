@@ -3,8 +3,6 @@
 
 #include <atomic>
 #include <chrono>
-#include <ctime>
-#include <iostream>
 #include <thread>
 #include <wx/wx.h>
 
