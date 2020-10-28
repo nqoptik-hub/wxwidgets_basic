@@ -48,6 +48,10 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "SampleApplication", wxPoi
 
 MainWindow::~MainWindow()
 {
+    if (is_printing_time_)
+    {
+        printing_time_thread_.detach();
+    }
 }
 
 void MainWindow::on_hello(wxCommandEvent& WXUNUSED(event))
