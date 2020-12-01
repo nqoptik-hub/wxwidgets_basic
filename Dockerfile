@@ -1,4 +1,5 @@
-FROM ubuntu:focal
+# Build stage
+FROM ubuntu:focal AS build
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     cmake \
@@ -16,9 +17,15 @@ COPY CMakeLists.txt .
 
 RUN mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make
 
-RUN rm -rf assets
-RUN rm -rf include
-RUN rm -rf src
-RUN rm CMakeLists.txt
+# Production stage
+FROM ubuntu:focal AS production
 
-CMD [ "./build/sample_application" ]
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libwxgtk3.0-gtk3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /root/wxwidgets_basic
+
+COPY --from=build /root/wxwidgets_basic/build build
+
+CMD [ "build/sample_application" ]
