@@ -42,7 +42,7 @@
 *.user
 *.opendb
 *.csv
-build/*
-*/build/*
+build*/*
+*/build*/*
 doc/*
 */doc/*
