@@ -5,8 +5,7 @@
 
 #include "wxwidgets_basic/main_window.hpp"
 
-class SampleApplication : public wxApp
-{
+class SampleApplication : public wxApp {
 public:
     SampleApplication();
     ~SampleApplication();

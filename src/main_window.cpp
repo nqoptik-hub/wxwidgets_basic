@@ -41,15 +41,14 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "SampleApplication", wxPoi
     CreateStatusBar();
     SetStatusText("Welcome to SampleApplication!");
 
-    text_ptr_ = new wxTextCtrl(this, wxID_ANY, "Sample text", wxPoint(10, 70), wxSize(300, 30));
+    text_ptr_   = new wxTextCtrl(this, wxID_ANY, "Sample text", wxPoint(10, 70), wxSize(300, 30));
     button_ptr_ = new wxButton(this, ID_BUTTON_CLICK_ME, "Click me", wxPoint(10, 10), wxSize(150, 50));
     button_ptr_->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainWindow::on_click_me, this, ID_BUTTON_CLICK_ME);
 }
 
 MainWindow::~MainWindow()
 {
-    if (is_printing_time_)
-    {
+    if (is_printing_time_) {
         printing_time_thread_.detach();
     }
 }
@@ -61,40 +60,31 @@ void MainWindow::on_hello(wxCommandEvent& WXUNUSED(event))
 
 void MainWindow::on_exit(wxCommandEvent& WXUNUSED(event))
 {
-    if (is_printing_time_)
-    {
+    if (is_printing_time_) {
         wxMessageBox("The time printer is still running, please stop it before close the application!", "Warning", wxOK | wxICON_WARNING);
-    }
-    else
-    {
+    } else {
         Close(true);
     }
 }
 
 void MainWindow::on_start_printing_time(wxCommandEvent& WXUNUSED(event))
 {
-    if (!is_printing_time_)
-    {
-        is_printing_time_ = true;
+    if (!is_printing_time_) {
+        is_printing_time_     = true;
         printing_time_thread_ = std::thread(create_printing_time_thread, this);
         wxMessageBox("Started printing time!", "Time", wxOK | wxICON_INFORMATION);
-    }
-    else
-    {
+    } else {
         wxMessageBox("The time printer is already running!", "Warning", wxOK | wxICON_WARNING);
     }
 }
 
 void MainWindow::on_stop_printing_time(wxCommandEvent& WXUNUSED(event))
 {
-    if (is_printing_time_)
-    {
+    if (is_printing_time_) {
         is_printing_time_ = false;
         printing_time_thread_.detach();
         wxMessageBox("Stopped printing time!", "Time", wxOK | wxICON_INFORMATION);
-    }
-    else
-    {
+    } else {
         wxMessageBox("The time printer is not runing!", "Warning", wxOK | wxICON_WARNING);
     }
 }
@@ -118,8 +108,7 @@ void MainWindow::create_printing_time_thread(MainWindow* this_object_ptr)
 
 void MainWindow::print_time()
 {
-    while (is_printing_time_)
-    {
+    while (is_printing_time_) {
         std::time_t time_now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
         printf("%s", std::ctime(&time_now));
         std::this_thread::sleep_for(std::chrono::seconds(1));
